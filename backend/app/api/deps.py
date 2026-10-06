@@ -43,3 +43,6 @@ def require_roles(*roles: Role):
         return user
 
     return Depends(check_role)
+
+
+Engineer = Annotated[User, require_roles(Role.ENGINEER, Role.ADMIN)]

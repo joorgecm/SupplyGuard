@@ -1,12 +1,4 @@
-import pytest
 from fastapi.testclient import TestClient
-
-
-@pytest.fixture
-def part(client: TestClient) -> dict:
-    supplier = client.post("/suppliers", json={"name": "Metalex"}).json()
-    payload = {"supplier_id": supplier["id"], "reference": "BRK-001", "lot": "L-100"}
-    return client.post("/parts", json=payload).json()
 
 
 def create_incident(client: TestClient, part_id: int, **extra) -> dict:

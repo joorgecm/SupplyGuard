@@ -9,3 +9,7 @@ class ConflictError(Exception):
 
 class BusinessRuleError(Exception):
     pass
+
+
+class PermissionDeniedError(Exception):
+    pass

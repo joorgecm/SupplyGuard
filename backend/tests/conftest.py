@@ -88,3 +88,10 @@ def operator_client(anon_client: TestClient, make_user: Callable[..., User]) -> 
 @pytest.fixture
 def engineer_client(anon_client: TestClient, make_user: Callable[..., User]) -> TestClient:
     return client_for(make_user(Role.ENGINEER))
+
+
+@pytest.fixture
+def part(client: TestClient) -> dict:
+    supplier = client.post("/suppliers", json={"name": "Metalex"}).json()
+    payload = {"supplier_id": supplier["id"], "reference": "BRK-001", "lot": "L-100"}
+    return client.post("/parts", json=payload).json()

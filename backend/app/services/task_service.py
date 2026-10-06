@@ -2,8 +2,9 @@ from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import NotFoundError
+from app.core.exceptions import NotFoundError, PermissionDeniedError
 from app.models import Task, User
+from app.models.enums import Role
 from app.schemas.task_schema import TaskCreate, TaskUpdate
 from app.services import action_plan_service, incident_service, user_service
 from app.services.incident_history_service import record_event
@@ -33,6 +34,7 @@ def update_task(db: Session, task_id: int, data: TaskUpdate, current_user: User)
     incident = task.action_plan.incident
     incident_service.ensure_not_closed(incident)
     changes = data.model_dump(exclude_unset=True)
+    _ensure_can_update(task, changes, current_user)
     if "assigned_to_id" in changes:
         user_service.get_active_user(db, changes["assigned_to_id"])
 
@@ -62,3 +64,13 @@ def delete_task(db: Session, task_id: int, current_user: User) -> None:
     db.delete(task)
     record_event(db, incident, current_user, "task_deleted")
     db.commit()
+
+
+def _ensure_can_update(task: Task, changes: dict, current_user: User) -> None:
+    # Ingenieros y admins editan cualquier tarea; el responsable solo puede marcar la suya
+    if current_user.role in (Role.ENGINEER, Role.ADMIN):
+        return
+    if task.assigned_to_id != current_user.id:
+        raise PermissionDeniedError("Only engineers or the assignee can update this task")
+    if set(changes) - {"completed"}:
+        raise PermissionDeniedError("The assignee can only mark the task as completed or not")

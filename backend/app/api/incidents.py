@@ -1,10 +1,7 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends, status
 
-from app.api.deps import CurrentUser, DbSession, get_current_user, require_roles
-from app.models import User
-from app.models.enums import IncidentStatus, Role, Severity
+from app.api.deps import CurrentUser, DbSession, Engineer, get_current_user
+from app.models.enums import IncidentStatus, Severity
 from app.schemas.incident_schema import (
     IncidentCreate,
     IncidentDetail,
@@ -17,8 +14,6 @@ from app.services import incident_service
 router = APIRouter(
     prefix="/incidents", tags=["incidents"], dependencies=[Depends(get_current_user)]
 )
-
-Engineer = Annotated[User, require_roles(Role.ENGINEER, Role.ADMIN)]
 
 
 @router.get("", response_model=list[IncidentRead])
