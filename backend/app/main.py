@@ -6,7 +6,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from app.api import auth, parts, suppliers
+from app.api import auth, parts, suppliers, users
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.exceptions import BusinessRuleError, ConflictError, NotFoundError
@@ -14,6 +14,7 @@ from app.core.exceptions import BusinessRuleError, ConflictError, NotFoundError
 app = FastAPI(title=settings.app_name, version="0.1.0")
 
 app.include_router(auth.router)
+app.include_router(users.router)
 app.include_router(suppliers.router)
 app.include_router(parts.router)
 

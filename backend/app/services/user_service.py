@@ -38,9 +38,14 @@ def create_user(db: Session, data: UserCreate) -> User:
     return user
 
 
-def update_user(db: Session, user_id: int, data: UserUpdate) -> User:
+def update_user(db: Session, user_id: int, data: UserUpdate, current_user: User) -> User:
     user = get_user(db, user_id)
     changes = data.model_dump(exclude_unset=True)
+    # Evita que un admin se bloquee a sí mismo y el sistema se quede sin admin
+    if user.id == current_user.id and (
+        changes.get("is_active") is False or changes.get("role", Role.ADMIN) != Role.ADMIN
+    ):
+        raise BusinessRuleError("You cannot deactivate yourself or remove your own admin role")
     if "password" in changes:
         user.password_hash = hash_password(changes.pop("password"))
     for field, value in changes.items():
