@@ -101,3 +101,20 @@ def test_update_missing_supplier_returns_404(client: TestClient):
     response = client.patch("/suppliers/999999", json={"name": "Ghost"})
 
     assert response.status_code == 404
+
+
+def test_suppliers_require_authentication(anon_client: TestClient):
+    assert anon_client.get("/suppliers").status_code == 401
+    assert anon_client.post("/suppliers", json={"name": "Metalex"}).status_code == 401
+
+
+def test_operator_can_read_but_not_modify_suppliers(
+    client: TestClient, operator_client: TestClient
+):
+    supplier = create_supplier(client)
+
+    assert operator_client.get("/suppliers").status_code == 200
+    assert operator_client.get(f"/suppliers/{supplier['id']}").status_code == 200
+    assert operator_client.post("/suppliers", json={"name": "Other"}).status_code == 403
+    response = operator_client.patch(f"/suppliers/{supplier['id']}", json={"name": "New"})
+    assert response.status_code == 403

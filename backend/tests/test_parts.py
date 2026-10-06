@@ -112,3 +112,17 @@ def test_update_part_rejects_null_reference(client: TestClient):
     part = create_part(client, create_supplier(client)["id"])
 
     assert client.patch(f"/parts/{part['id']}", json={"reference": None}).status_code == 422
+
+
+def test_parts_require_authentication(anon_client: TestClient):
+    assert anon_client.get("/parts").status_code == 401
+
+
+def test_operator_can_read_but_not_modify_parts(client: TestClient, operator_client: TestClient):
+    supplier_id = create_supplier(client)["id"]
+    part = create_part(client, supplier_id)
+
+    assert operator_client.get(f"/parts/{part['id']}").status_code == 200
+    payload = {"supplier_id": supplier_id, "reference": "NEW-001", "lot": "L-1"}
+    assert operator_client.post("/parts", json=payload).status_code == 403
+    assert operator_client.patch(f"/parts/{part['id']}", json={"lot": "X"}).status_code == 403
