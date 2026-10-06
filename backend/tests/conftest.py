@@ -83,3 +83,8 @@ def client(anon_client: TestClient, make_user: Callable[..., User]) -> TestClien
 @pytest.fixture
 def operator_client(anon_client: TestClient, make_user: Callable[..., User]) -> TestClient:
     return client_for(make_user(Role.OPERATOR))
+
+
+@pytest.fixture
+def engineer_client(anon_client: TestClient, make_user: Callable[..., User]) -> TestClient:
+    return client_for(make_user(Role.ENGINEER))

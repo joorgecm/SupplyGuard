@@ -6,7 +6,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from app.api import auth, parts, suppliers, users
+from app.api import auth, incidents, parts, suppliers, users
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.exceptions import BusinessRuleError, ConflictError, NotFoundError
@@ -17,6 +17,7 @@ app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(suppliers.router)
 app.include_router(parts.router)
+app.include_router(incidents.router)
 
 
 # Traducen los errores de los servicios a respuestas HTTP
