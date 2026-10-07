@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-canvas: #fafaf9;
+  --color-surface: #ffffff;
+  --color-sunken: #f5f5f4;
+  --color-line: #e7e5e4;
+  --color-line-strong: #d6d3d1;
+  --color-ink: #1c1917;
+  --color-ink-muted: #57534e;
+  --color-ink-subtle: #a8a29e;
+
+  --color-accent: #2f5bd3;
+  --color-accent-hover: #2549b0;
+  --color-accent-soft: #eef2fc;
+
+  --color-sev-low: #64748b;
+  --color-sev-medium: #d97706;
+  --color-sev-high: #ea580c;
+  --color-sev-critical: #dc2626;
+
+  --color-st-open: #2f5bd3;
+  --color-st-analysis: #7c3aed;
+  --color-st-action: #0d9488;
+  --color-st-closed: #a8a29e;
+
+  --color-danger: #dc2626;
+  --color-success: #15803d;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+/* Respuesta inmediata al pulsar cualquier botón */
+.pressable {
+  transition:
+    transform 140ms var(--ease-out),
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+.pressable:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Entrada suave del contenido de cada página */
+.enter {
+  animation: enter 220ms var(--ease-out) both;
+}
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pressable:active:not(:disabled) {
+    transform: none;
+  }
+  .enter {
+    animation-name: fade;
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+}
