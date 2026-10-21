@@ -26,3 +26,9 @@ Thumbs.db
 
 # Claude Code project instructions (kept local)
 CLAUDE.md
+
+# Design review artifacts
+.playwright-mcp/
+.impeccable/review/
+
+

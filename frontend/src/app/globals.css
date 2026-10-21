@@ -1,64 +1,154 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+/* inline: las variables de next/font se resuelven en cada elemento, no en :root */
+@theme inline {
+  --font-sans: var(--font-barlow), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow-condensed), var(--font-barlow), ui-sans-serif, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
 
-  --color-canvas: #fafaf9;
+@theme {
+  /* Suelo de nave: gris hormigón cálido, superficies blancas */
+  --color-ground: #e9e8e3;
   --color-surface: #ffffff;
-  --color-sunken: #f5f5f4;
-  --color-line: #e7e5e4;
-  --color-line-strong: #d6d3d1;
-  --color-ink: #1c1917;
-  --color-ink-muted: #57534e;
-  --color-ink-subtle: #a8a29e;
+  --color-sunken: #f4f3ef;
+  --color-line: #dad8d1;
+  --color-line-strong: #bebbb2;
+  --color-ink: #1d1d1b;
+  --color-ink-muted: #55534d;
+  --color-ink-subtle: #74716a;
 
-  --color-accent: #2f5bd3;
-  --color-accent-hover: #2549b0;
-  --color-accent-soft: #eef2fc;
+  /* Barra superior en negro señal */
+  --color-shell: #1d1d1b;
+  --color-shell-raised: #2a2a27;
+  --color-shell-line: #3b3a36;
+  --color-shell-ink: #f2f1ec;
+  --color-shell-muted: #a9a69d;
 
-  --color-sev-low: #64748b;
-  --color-sev-medium: #d97706;
-  --color-sev-high: #ea580c;
-  --color-sev-critical: #dc2626;
-
-  --color-st-open: #2f5bd3;
-  --color-st-analysis: #7c3aed;
-  --color-st-action: #0d9488;
-  --color-st-closed: #a8a29e;
-
-  --color-danger: #dc2626;
-  --color-success: #15803d;
+  /* Colores de seguridad ISO 3864 */
+  --color-yellow: #f5b301;
+  --color-yellow-soft: #fdf1c7;
+  --color-yellow-ink: #6b4e00;
+  --color-red: #c8231c;
+  --color-red-soft: #fbe4e2;
+  --color-red-ink: #9e1a14;
+  --color-orange: #e2580b;
+  --color-orange-soft: #fde9dc;
+  --color-orange-ink: #a03c05;
+  --color-blue: #1f5aa6;
+  --color-blue-soft: #e2eaf6;
+  --color-blue-ink: #17457f;
+  --color-green: #1e7b45;
+  --color-green-soft: #dff0e5;
+  --color-green-ink: #145a32;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
+html {
+  font-variant-numeric: tabular-nums;
+  -webkit-tap-highlight-color: transparent;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
 body {
-  background: var(--color-canvas);
+  background: var(--color-ground);
+  color: var(--color-ink);
+  caret-color: var(--color-blue);
+}
+
+::selection {
+  background: var(--color-yellow);
   color: var(--color-ink);
 }
 
-/* Respuesta inmediata al pulsar cualquier botón */
+:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+/* Rótulo condensado en mayúsculas, como en la señalética de planta */
+.label {
+  font-family: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.display {
+  font-family: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+/* Cinta de peligro: solo donde hay un peligro real (crítica abierta, tarea vencida) */
+.hazard {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-yellow) 0 10px,
+    var(--color-ink) 10px 20px
+  );
+}
+
 .pressable {
   transition:
     transform 140ms var(--ease-out),
     background-color 150ms ease,
     border-color 150ms ease,
-    color 150ms ease;
+    color 150ms ease,
+    opacity 150ms ease;
 }
 .pressable:active:not(:disabled) {
   transform: scale(0.97);
 }
 
-/* Entrada suave del contenido de cada página */
 .enter {
-  animation: enter 220ms var(--ease-out) both;
+  animation: enter 260ms var(--ease-out) both;
 }
 @keyframes enter {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(6px);
+  }
+}
+
+/* La cinta del flujo se rellena hasta el paso actual */
+.tape-fill {
+  transform-origin: left center;
+  animation: tape 700ms var(--ease-out) 120ms both;
+}
+@keyframes tape {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Un cambio de estado se queda iluminado hasta que el usuario lo ve */
+.lit {
+  animation: lit 1400ms var(--ease-out) both;
+}
+@keyframes lit {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-yellow) 90%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-yellow) 0%, transparent);
+  }
+}
+
+.count-up {
+  animation: count 600ms var(--ease-out) both;
+}
+@keyframes count {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
   }
 }
 
@@ -66,8 +156,13 @@ body {
   .pressable:active:not(:disabled) {
     transform: none;
   }
-  .enter {
+  .enter,
+  .count-up {
     animation-name: fade;
+  }
+  .tape-fill,
+  .lit {
+    animation: none;
   }
   @keyframes fade {
     from {

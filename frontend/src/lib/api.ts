@@ -1,6 +1,8 @@
 import "server-only";
 
 import { redirect } from "next/navigation";
+import { translateApiError } from "./i18n/api-errors";
+import { getLocale } from "./i18n/server";
 import { getToken } from "./session";
 
 export const API_URL = process.env.API_URL ?? "http://localhost:8000";
@@ -24,7 +26,10 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
 
   // Token caducado o inválido: se borra la cookie y se vuelve al login
   if (response.status === 401) redirect("/logout");
-  if (!response.ok) throw new ApiError(response.status, await readDetail(response));
+  if (!response.ok) {
+    const detail = await readDetail(response);
+    throw new ApiError(response.status, translateApiError(detail, await getLocale()));
+  }
   if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
 }
@@ -34,7 +39,8 @@ export async function readDetail(response: Response): Promise<string> {
     const body = await response.json();
     // FastAPI devuelve un texto en "detail", o una lista de errores si falla la validación
     if (typeof body.detail === "string") return body.detail;
-    if (Array.isArray(body.detail)) return body.detail.map((e: { msg: string }) => e.msg).join(", ");
+    if (Array.isArray(body.detail))
+      return body.detail.map((e: { msg: string }) => e.msg).join(", ");
   } catch {}
   return `Request failed (${response.status})`;
 }

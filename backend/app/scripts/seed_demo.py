@@ -37,23 +37,63 @@ SUPPLIERS = [
 
 # (proveedor, referencia, descripción, defectos típicos)
 PARTS = [
-    (0, "SP-2041", "Front bumper bracket", ["Off-centre mounting holes", "Burrs on cut edges"]),
-    (0, "SP-2187", "Seat rail support", ["Weld spatter on contact surface", "Bent flange"]),
-    (1, "PL-0310", "Door trim clip", ["Short shot on clip tab", "Wrong colour batch"]),
-    (1, "PL-0452", "Air vent housing", ["Sink marks on visible face", "Flash on parting line"]),
-    (2, "TH-M8x25", "Hex flange bolt M8x25", ["Thread out of tolerance", "Missing zinc coating"]),
-    (2, "TH-M6x16", "Torx screw M6x16", ["Mixed lengths in batch", "Head cracks"]),
-    (3, "CT-HX-118", "Rear light wiring harness", ["Crimp pull-out below spec", "Wrong connector"]),
-    (4, "FT-AL-77", "Aluminium gearbox cover", ["Porosity on sealing face", "Out of tolerance"]),
+    (
+        0,
+        "SP-2041",
+        "Soporte de paragolpes delantero",
+        ["Agujeros de montaje descentrados", "Rebabas en los bordes de corte"],
+    ),
+    (
+        0,
+        "SP-2187",
+        "Refuerzo de guía de asiento",
+        ["Salpicaduras de soldadura en la superficie de contacto", "Pestaña doblada"],
+    ),
+    (
+        1,
+        "PL-0310",
+        "Clip de panel de puerta",
+        ["Llenado incompleto en la lengüeta del clip", "Lote con color incorrecto"],
+    ),
+    (
+        1,
+        "PL-0452",
+        "Carcasa de rejilla de ventilación",
+        ["Marcas de hundimiento en la cara visible", "Rebaba en la línea de cierre del molde"],
+    ),
+    (
+        2,
+        "TH-M8x25",
+        "Tornillo de brida hexagonal M8x25",
+        ["Rosca fuera de tolerancia", "Falta recubrimiento de zinc"],
+    ),
+    (
+        2,
+        "TH-M6x16",
+        "Tornillo Torx M6x16",
+        ["Longitudes mezcladas en el lote", "Grietas en la cabeza"],
+    ),
+    (
+        3,
+        "CT-HX-118",
+        "Mazo de cables de piloto trasero",
+        ["Extracción del crimpado por debajo de especificación", "Conector incorrecto"],
+    ),
+    (
+        4,
+        "FT-AL-77",
+        "Tapa de caja de cambios de aluminio",
+        ["Porosidad en la cara de estanqueidad", "Fuera de tolerancia"],
+    ),
 ]
 
 TASK_TEMPLATES = [
-    "Quarantine affected lot in warehouse",
-    "Request 8D report from supplier",
-    "Sort and rework stock on site",
-    "Update incoming inspection plan",
-    "Verify supplier containment actions",
-    "Audit supplier production line",
+    "Poner en cuarentena el lote afectado en almacén",
+    "Pedir al proveedor el informe 8D",
+    "Clasificar y reprocesar el stock en planta",
+    "Actualizar el plan de inspección de recepción",
+    "Verificar las acciones de contención del proveedor",
+    "Auditar la línea de producción del proveedor",
 ]
 
 
@@ -104,8 +144,9 @@ def seed(db: Session, rng: random.Random) -> None:
             part=part,
             title=f"{rng.choice(defects)} — {part.reference}",
             description=(
-                f"Detected at incoming inspection on lot {part.lot}. "
-                f"{rng.randint(3, 60)} of {rng.choice([100, 200, 500])} sampled units affected."
+                f"Detectado en la inspección de recepción del lote {part.lot}. "
+                f"{rng.randint(3, 60)} de {rng.choice([100, 200, 500])} piezas muestreadas "
+                "afectadas."
             ),
             severity=rng.choices(severities, weights=[3, 4, 3, 1])[0],
             reported_by=rng.choice(operators),
@@ -168,7 +209,9 @@ def _advance(db, rng, incident, engineers, created, now) -> None:
         ActionPlan(
             incident=incident,
             created_by=engineer,
-            description="Contain the lot, get the root cause from the supplier and verify the fix.",
+            description=(
+                "Contener el lote, obtener la causa raíz del proveedor y verificar la solución."
+            ),
             created_at=planned,
             tasks=tasks,
         )

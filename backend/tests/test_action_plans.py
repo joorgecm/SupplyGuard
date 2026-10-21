@@ -190,3 +190,16 @@ def test_action_plans_permissions(
     me = operator_client.get("/auth/me").json()
     response = operator_client.post(f"{plan_url}/tasks", json=task_payload(me["id"]))
     assert response.status_code == 403
+
+
+def test_list_assignees_only_active_users_and_engineers(
+    engineer_client: TestClient, operator_client: TestClient, make_user
+):
+    inactive = make_user(Role.OPERATOR, is_active=False)
+
+    response = engineer_client.get("/assignees")
+
+    assert response.status_code == 200
+    assert inactive.id not in [user["id"] for user in response.json()]
+    assert set(response.json()[0]) == {"id", "full_name"}
+    assert operator_client.get("/assignees").status_code == 403

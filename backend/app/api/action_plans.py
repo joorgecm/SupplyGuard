@@ -3,9 +3,16 @@ from fastapi import APIRouter, Depends, status
 from app.api.deps import DbSession, Engineer, get_current_user
 from app.schemas.action_plan_schema import ActionPlanCreate, ActionPlanRead, ActionPlanUpdate
 from app.schemas.task_schema import TaskCreate, TaskRead
-from app.services import action_plan_service, task_service
+from app.schemas.user_schema import UserSummary
+from app.services import action_plan_service, task_service, user_service
 
 router = APIRouter(tags=["action plans"], dependencies=[Depends(get_current_user)])
+
+
+# /users es solo para admin; los ingenieros necesitan esta lista para asignar tareas
+@router.get("/assignees", response_model=list[UserSummary])
+def list_assignees(db: DbSession, user: Engineer):
+    return user_service.list_assignees(db)
 
 
 @router.get("/incidents/{incident_id}/action-plan", response_model=ActionPlanRead)

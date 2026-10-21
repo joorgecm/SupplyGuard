@@ -17,6 +17,10 @@ def list_users(db: Session, active: bool | None = None, role: Role | None = None
     return list(db.scalars(query))
 
 
+def list_assignees(db: Session) -> list[User]:
+    return list_users(db, active=True)
+
+
 def get_user(db: Session, user_id: int) -> User:
     user = db.get(User, user_id)
     if user is None:
