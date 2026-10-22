@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { SEVERITIES } from "@/lib/format";
 import type { MonthIntake, SupplierRank } from "@/lib/kpis";
@@ -19,9 +20,49 @@ const SEVERITY_COLOR = {
 
 const AXIS_TICK = { fontSize: 13, fill: MUTED, fontFamily: "var(--font-sans)" };
 const ROW_HEIGHT = 40;
+const NARROW_NAME_MAX = 12;
+const WIDE_QUERY = "(min-width: 640px)";
+
+function subscribeWide(onChange: () => void) {
+  const query = window.matchMedia(WIDE_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+// En el servidor se dibujan los nombres completos; en móvil se acortan tras hidratar
+function useWide() {
+  return useSyncExternalStore(
+    subscribeWide,
+    () => window.matchMedia(WIDE_QUERY).matches,
+    () => true,
+  );
+}
+
+function SupplierTick({
+  x,
+  y,
+  payload,
+  wide,
+}: {
+  x?: number | string;
+  y?: number | string;
+  payload?: { value: string };
+  wide: boolean;
+}) {
+  const name = payload?.value ?? "";
+  const shown =
+    !wide && name.length > NARROW_NAME_MAX ? `${name.slice(0, NARROW_NAME_MAX - 1)}…` : name;
+  return (
+    <text x={x} y={y} dy={4} textAnchor="end" {...AXIS_TICK}>
+      <title>{name}</title>
+      {shown}
+    </text>
+  );
+}
 
 export function SupplierChart({ data }: { data: SupplierRank[] }) {
   const t = useT();
+  const wide = useWide();
   const rows = data.map((rank) => ({
     supplier: rank.supplier,
     active: rank.open,
@@ -36,6 +77,8 @@ export function SupplierChart({ data }: { data: SupplierRank[] }) {
             data={rows}
             layout="vertical"
             margin={{ left: 0, right: 12, top: 0, bottom: 0 }}
+            title={t.dashboard.suppliers}
+            desc={t.dashboard.chartHint}
           >
             <CartesianGrid horizontal={false} stroke={LINE} strokeDasharray="2 4" />
             <XAxis
@@ -48,8 +91,8 @@ export function SupplierChart({ data }: { data: SupplierRank[] }) {
             <YAxis
               type="category"
               dataKey="supplier"
-              width={136}
-              tick={AXIS_TICK}
+              width={wide ? 136 : 104}
+              tick={<SupplierTick wide={wide} />}
               axisLine={false}
               tickLine={false}
               interval={0}
@@ -76,6 +119,11 @@ export function SupplierChart({ data }: { data: SupplierRank[] }) {
           { label: t.dashboard.closed, color: LINE_STRONG },
         ]}
       />
+      <DataTable
+        caption={`${t.dashboard.suppliers}: ${t.dashboard.suppliersAside}`}
+        head={[t.incidents.colSupplier, t.dashboard.active, t.dashboard.closed]}
+        rows={rows.map((row) => [row.supplier, row.active, row.closed])}
+      />
     </div>
   );
 }
@@ -86,7 +134,12 @@ export function IntakeChart({ data }: { data: MonthIntake[] }) {
     <div>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ left: -16, right: 12, top: 4, bottom: 0 }}>
+          <BarChart
+            data={data}
+            margin={{ left: -16, right: 12, top: 4, bottom: 0 }}
+            title={t.dashboard.intake}
+            desc={t.dashboard.chartHint}
+          >
             <CartesianGrid vertical={false} stroke={LINE} strokeDasharray="2 4" />
             <XAxis
               dataKey="month"
@@ -114,7 +167,48 @@ export function IntakeChart({ data }: { data: MonthIntake[] }) {
         </ResponsiveContainer>
       </div>
       <Legend items={SEVERITIES.map((s) => ({ label: t.severity[s], color: SEVERITY_COLOR[s] }))} />
+      <DataTable
+        caption={`${t.dashboard.intake}: ${t.dashboard.intakeAside}`}
+        head={[t.dashboard.month, ...SEVERITIES.map((s) => t.severity[s])]}
+        rows={data.map((row) => [row.month, ...SEVERITIES.map((s) => row[s])])}
+      />
     </div>
+  );
+}
+
+// Los valores exactos de cada gráfica, para lectores de pantalla (el tooltip solo los muestra al enfocar)
+function DataTable({
+  caption,
+  head,
+  rows,
+}: {
+  caption: string;
+  head: string[];
+  rows: (string | number)[][];
+}) {
+  return (
+    <table className="sr-only">
+      <caption>{caption}</caption>
+      <thead>
+        <tr>
+          {head.map((label) => (
+            <th key={label} scope="col">
+              {label}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(([name, ...values], index) => (
+          <tr key={index}>
+            <th scope="row">{name}</th>
+            {values.map((value, column) => (
+              <td key={column}>{value}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 

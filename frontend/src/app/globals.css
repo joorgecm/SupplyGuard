@@ -14,6 +14,8 @@
   --color-sunken: #f4f3ef;
   --color-line: #dad8d1;
   --color-line-strong: #bebbb2;
+  /* Borde de controles: 3:1 sobre blanco y gris suelo (WCAG 1.4.11) */
+  --color-control: #7d7970;
   --color-ink: #1d1d1b;
   --color-ink-muted: #55534d;
   --color-ink-subtle: #74716a;
@@ -27,6 +29,7 @@
 
   /* Colores de seguridad ISO 3864 */
   --color-yellow: #f5b301;
+  --color-yellow-hover: #e6a700;
   --color-yellow-soft: #fdf1c7;
   --color-yellow-ink: #6b4e00;
   --color-red: #c8231c;

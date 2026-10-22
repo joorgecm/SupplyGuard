@@ -30,7 +30,7 @@ export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
             aria-pressed={selected}
             disabled={pending}
             onClick={() => startTransition(() => setLocale(code))}
-            className={`rounded-xs px-2 py-1 transition-colors ${
+            className={`rounded-xs px-2 py-1 pointer-coarse:py-2.5 transition-colors ${
               selected
                 ? dark
                   ? "bg-shell-ink text-ink"

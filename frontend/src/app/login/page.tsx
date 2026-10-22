@@ -3,9 +3,9 @@ import { Suspense } from "react";
 import { StatusSign } from "@/components/badges";
 import { LanguageSwitch } from "@/components/language-switch";
 import { Mark } from "@/components/mark";
+import { DEMO_ACCOUNTS, demoLoginsEnabled } from "@/lib/demo";
 import { STATUS_FLOW } from "@/lib/format";
 import { getDict } from "@/lib/i18n/server";
-import type { Role } from "@/lib/types";
 import { ExpiredNotice } from "./expired-notice";
 import { LoginForm } from "./login-form";
 
@@ -13,16 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getDict()).login.title };
 }
 
-// Cuentas creadas por backend/app/scripts/seed_demo.py; solo se muestran en desarrollo o con DEMO_LOGINS=true
-const DEMO_ACCOUNTS: { email: string; name: string; role: Role }[] = [
-  { email: "operario@demo.com", name: "Lucía Navarro", role: "operator" },
-  { email: "ingeniero@demo.com", name: "Elena Soler", role: "engineer" },
-  { email: "admin@demo.com", name: "Pablo Martí", role: "admin" },
-];
-
 export default async function LoginPage() {
   const t = await getDict();
-  const showDemo = process.env.NODE_ENV !== "production" || process.env.DEMO_LOGINS === "true";
+  const showDemo = demoLoginsEnabled();
 
   return (
     <main className="grid min-h-screen lg:grid-cols-[1.1fr_1fr]">

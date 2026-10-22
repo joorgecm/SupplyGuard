@@ -40,7 +40,7 @@ async function UserArea() {
             type="submit"
             aria-label={t.common.signOut}
             title={t.common.signOut}
-            className="pressable flex size-9 items-center justify-center rounded-sm text-shell-muted hover:bg-shell-raised hover:text-shell-ink"
+            className="pressable flex size-9 items-center justify-center rounded-sm text-shell-muted hover:bg-shell-raised hover:text-shell-ink pointer-coarse:size-11"
           >
             <LogOut className="size-4" aria-hidden />
           </button>

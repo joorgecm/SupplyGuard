@@ -59,11 +59,11 @@ export function TaskItem({
         disabled={!canToggle || pending}
         onClick={toggle}
         aria-label={completed ? t.detail.markUndone(title) : t.detail.markDone(title)}
-        className={`pressable mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-xs border-2 transition-colors disabled:cursor-not-allowed ${
+        className={`pressable relative flex size-6 shrink-0 items-center justify-center rounded-xs border-2 transition-colors before:absolute before:-inset-2.5 before:content-[''] disabled:cursor-not-allowed ${
           completed
             ? "border-green bg-green text-white"
             : canToggle
-              ? "border-line-strong bg-surface hover:border-ink"
+              ? "border-control bg-surface hover:border-ink"
               : "border-line bg-sunken"
         }`}
       >
@@ -110,7 +110,7 @@ export function TaskItem({
           disabled={pending}
           aria-label={t.detail.deleteTaskNamed(title)}
           title={t.detail.deleteTask}
-          className="pressable rounded-sm p-1.5 text-ink-subtle opacity-100 hover:bg-red-soft hover:text-red-ink disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
+          className="pressable rounded-sm p-2 pointer-coarse:p-3.5 text-ink-subtle opacity-100 hover:bg-red-soft hover:text-red-ink disabled:opacity-50 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 pointer-fine:focus-visible:opacity-100"
         >
           <Trash2 className="size-4" aria-hidden />
         </button>

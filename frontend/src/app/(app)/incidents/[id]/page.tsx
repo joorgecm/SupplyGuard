@@ -407,7 +407,7 @@ function History({ events, t, locale }: { events: HistoryEvent[]; t: Dict; local
 
 function DetailSkeleton() {
   return (
-    <div className="mt-4 animate-pulse" aria-busy>
+    <div className="mt-4 motion-safe:animate-pulse" aria-busy>
       <div className="h-4 w-48 rounded-xs bg-line" />
       <div className="mt-3 h-10 w-2/3 rounded-sm bg-line" />
       <div className="mt-6 h-24 rounded-md bg-surface" />

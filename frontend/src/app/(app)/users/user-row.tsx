@@ -92,7 +92,7 @@ export function UserRow({ user, isMe }: { user: User; isMe: boolean }) {
                   : t.users.reactivated(user.full_name),
               )
             }
-            className="pressable flex items-center gap-2 text-sm disabled:opacity-50"
+            className="pressable flex items-center gap-2 text-sm disabled:opacity-50 pointer-coarse:min-h-11"
           >
             <span
               className={`relative h-5 w-9 rounded-full transition-colors duration-200 ${optimistic.is_active ? "bg-green" : "bg-line-strong"}`}

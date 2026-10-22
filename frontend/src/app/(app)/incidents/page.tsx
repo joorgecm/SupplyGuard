@@ -243,7 +243,7 @@ function pick<T extends string>(value: string | string[] | undefined, allowed: T
 
 function ListSkeleton() {
   return (
-    <div className="mt-6 animate-pulse" aria-busy>
+    <div className="mt-6 motion-safe:animate-pulse" aria-busy>
       <div className="h-10 w-full max-w-2xl rounded-sm bg-surface" />
       <div className="mt-4 h-96 rounded-md bg-surface" />
     </div>

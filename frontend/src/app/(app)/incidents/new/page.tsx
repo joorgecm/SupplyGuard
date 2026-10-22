@@ -32,7 +32,7 @@ export default async function NewIncidentPage() {
 
       <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]">
         <div className="rounded-md border border-line bg-surface p-5 sm:p-7">
-          <Suspense fallback={<div className="h-96 animate-pulse rounded-sm bg-sunken" />}>
+          <Suspense fallback={<div className="h-96 motion-safe:animate-pulse rounded-sm bg-sunken" />}>
             <FormLoader />
           </Suspense>
         </div>

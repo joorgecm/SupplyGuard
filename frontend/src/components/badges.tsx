@@ -40,7 +40,7 @@ export function StatusSign({ status, size = 16 }: { status: IncidentStatus; size
     return (
       <svg {...common}>
         <circle cx="8" cy="8" r="7.5" fill="var(--color-blue)" />
-        <path d="M4.6 8h6.8" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+        <path d="M4.6 8h6.8" stroke="var(--color-surface)" strokeWidth="2" strokeLinecap="round" />
       </svg>
     );
   }
@@ -50,7 +50,7 @@ export function StatusSign({ status, size = 16 }: { status: IncidentStatus; size
       <path
         d="m4.6 8.2 2.3 2.3 4.6-4.9"
         fill="none"
-        stroke="#fff"
+        stroke="var(--color-surface)"
         strokeWidth="1.9"
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -1,16 +1,17 @@
 import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 
+// 16px en móvil: iOS amplía la página al enfocar un campo de menos de 16px
 export const inputClass =
-  "w-full rounded-sm border border-line-strong bg-surface px-3 py-2 text-ink outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-ink-subtle hover:border-ink-subtle focus:border-blue focus:ring-3 focus:ring-blue/15 disabled:bg-sunken disabled:text-ink-muted";
+  "w-full rounded-sm border border-control bg-surface px-3 py-2 text-base text-ink outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-ink-subtle hover:border-ink-subtle focus:border-blue focus:ring-3 focus:ring-blue/15 disabled:bg-sunken disabled:text-ink-muted sm:text-[0.9375rem] pointer-coarse:py-2.5";
 
 const buttonBase =
-  "pressable inline-flex items-center justify-center gap-2 rounded-sm px-4 py-2 font-display text-[0.9375rem] font-semibold tracking-[0.04em] uppercase whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50";
+  "pressable inline-flex items-center justify-center gap-2 rounded-sm px-4 py-2 font-display text-[0.9375rem] font-semibold tracking-[0.04em] uppercase whitespace-nowrap pointer-coarse:py-2.5 disabled:cursor-not-allowed disabled:opacity-50";
 
 export const buttonClass = {
   primary: `${buttonBase} bg-ink text-shell-ink hover:bg-shell-raised`,
-  attention: `${buttonBase} bg-yellow text-ink hover:bg-[#e6a700]`,
-  secondary: `${buttonBase} border border-line-strong bg-surface text-ink hover:border-ink-subtle hover:bg-sunken`,
+  attention: `${buttonBase} bg-yellow text-ink hover:bg-yellow-hover`,
+  secondary: `${buttonBase} border border-control bg-surface text-ink hover:border-ink-subtle hover:bg-sunken`,
   quiet: `${buttonBase} px-2 text-ink-muted hover:text-ink`,
 };
 

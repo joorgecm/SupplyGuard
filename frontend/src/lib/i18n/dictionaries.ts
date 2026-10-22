@@ -94,6 +94,8 @@ export const es = {
     active: "Activas",
     closed: "Cerradas",
     noIncidents: "Sin incidencias",
+    month: "Mes",
+    chartHint: "Usa las flechas del teclado para recorrer los valores.",
   },
   incidents: {
     title: "Incidencias",
@@ -351,6 +353,8 @@ export const en: Dict = {
     active: "Active",
     closed: "Closed",
     noIncidents: "No incidents",
+    month: "Month",
+    chartHint: "Use the arrow keys to move through the values.",
   },
   incidents: {
     title: "Incidents",

@@ -10,9 +10,10 @@ Tokens live in `frontend/src/app/globals.css` (`@theme`).
 |---|---|---|
 | Ground | `ground` #e9e8e3 | Page background, warm concrete grey |
 | Surface | `surface` #fff, `sunken` #f4f3ef | Panels, table headers, hover rows |
+| Control | `control` #7d7970 | Borders of inputs, selects, secondary buttons, checkboxes and option cards; 3:1 on surface and ground (WCAG 1.4.11) |
 | Ink | `ink` #1d1d1b, `ink-muted`, `ink-subtle` | Text; `ink` is also the primary button |
 | Shell | `shell` #1d1d1b and friends | Top bar and login panel (signal black) |
-| Safety yellow | `yellow` / `yellow-soft` / `yellow-ink` | Needs attention: status *open*, "next step" panel, report CTA, selection |
+| Safety yellow | `yellow` / `yellow-hover` / `yellow-soft` / `yellow-ink` | Needs attention: status *open*, "next step" panel, report CTA, selection |
 | Safety blue | `blue` / `blue-soft` / `blue-ink` | Mandatory action: *in analysis* (hollow), *corrective action* (solid); focus ring |
 | Safety green | `green` / `green-soft` / `green-ink` | Safe condition: *closed*, completed tasks, the safety board |
 | Orange / red | `orange`, `red` (+ soft/ink) | Severity high / critical, overdue, errors |

@@ -111,7 +111,7 @@ async function SafetyBoard({
           {t.dashboard.boardTitle}
         </h2>
         <svg viewBox="0 0 16 16" className="size-5" aria-hidden>
-          <rect x="1" y="1" width="14" height="14" rx="1.5" fill="#fff" />
+          <rect x="1" y="1" width="14" height="14" rx="1.5" fill="var(--color-surface)" />
           <path d="M8 4v8M4 8h8" stroke="var(--color-green)" strokeWidth="2.6" />
         </svg>
       </div>
@@ -121,7 +121,7 @@ async function SafetyBoard({
           {[...digits].map((digit, index) => (
             <span
               key={index}
-              className="count-up flex h-28 w-20 items-center justify-center rounded-sm bg-white font-display text-[5.5rem] leading-none font-bold text-ink sm:h-32 sm:w-24 sm:text-[6rem]"
+              className="count-up flex h-20 w-14 items-center justify-center rounded-sm bg-white font-display text-[3.75rem] leading-none font-bold text-ink sm:h-32 sm:w-24 sm:text-[6rem]"
               style={{ animationDelay: `${index * 90}ms` }}
             >
               {digit}
@@ -134,7 +134,7 @@ async function SafetyBoard({
             {days === null ? "" : t.dashboard.daysWithout(days)}
           </p>
           {record !== null && (
-            <p className="mt-2 text-white/80">
+            <p className="mt-2 text-white/90">
               {t.dashboard.record(record)}
               {safety.lastCritical && (
                 <>
@@ -235,9 +235,9 @@ async function Attention({ items, locale }: { items: Kpis["attention"]; locale: 
                 {incident.part.supplier.name} ·{" "}
                 <span className="font-mono text-[0.8125rem]">{incident.part.lot}</span>
               </p>
-            </div>
-            <div className="hidden sm:block">
-              <SeverityBadge severity={incident.severity} />
+              <div className="mt-1 text-sm">
+                <SeverityBadge severity={incident.severity} />
+              </div>
             </div>
             <span className="w-16 text-right text-sm text-ink-muted">
               {formatAge(ageDays, locale)}
@@ -251,7 +251,7 @@ async function Attention({ items, locale }: { items: Kpis["attention"]; locale: 
 
 function DashboardSkeleton() {
   return (
-    <div className="mt-8 grid animate-pulse grid-cols-1 gap-6 lg:grid-cols-[1.35fr_1fr]" aria-busy>
+    <div className="mt-8 grid motion-safe:animate-pulse grid-cols-1 gap-6 lg:grid-cols-[1.35fr_1fr]" aria-busy>
       <div className="h-64 rounded-md bg-green/20" />
       <div className="h-64 rounded-md bg-surface" />
       <div className="h-72 rounded-md bg-surface" />

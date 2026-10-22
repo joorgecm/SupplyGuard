@@ -1,34 +1,22 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { useActionState, useRef } from "react";
+import { useActionState } from "react";
 import { RoleTag } from "@/components/badges";
 import { Field, FormError, SubmitButton, inputClass } from "@/components/field";
 import { useT } from "@/lib/i18n/provider";
 import type { Role } from "@/lib/types";
 import { login } from "./actions";
 
-const DEMO_PASSWORD = "demo1234";
-
 type DemoAccount = { email: string; name: string; role: Role };
 
 export function LoginForm({ demoAccounts }: { demoAccounts: DemoAccount[] }) {
   const t = useT();
   const [state, formAction, pending] = useActionState(login, undefined);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  // Rellena el formulario con una cuenta demo y lo envía
-  function signInAs(email: string) {
-    const form = formRef.current;
-    if (!form) return;
-    (form.elements.namedItem("email") as HTMLInputElement).value = email;
-    (form.elements.namedItem("password") as HTMLInputElement).value = DEMO_PASSWORD;
-    form.requestSubmit();
-  }
 
   return (
     <>
-      <form ref={formRef} action={formAction} className="flex flex-col gap-5">
+      <form id="login" action={formAction} className="flex flex-col gap-5">
         <Field id="email" label={t.login.email}>
           <input
             id="email"
@@ -65,9 +53,12 @@ export function LoginForm({ demoAccounts }: { demoAccounts: DemoAccount[] }) {
             {demoAccounts.map((account) => (
               <li key={account.email}>
                 <button
-                  type="button"
+                  type="submit"
+                  form="login"
+                  formNoValidate
+                  name="demo"
+                  value={account.email}
                   disabled={pending}
-                  onClick={() => signInAs(account.email)}
                   className="pressable group flex w-full items-center gap-3 rounded-sm border border-line bg-surface px-3 py-2.5 text-left hover:border-ink-subtle disabled:opacity-50"
                 >
                   <RoleTag role={account.role} />

@@ -17,7 +17,7 @@ export default async function UsersPage() {
   return (
     <>
       <PageTitle title={t.users.title} />
-      <Suspense fallback={<div className="mt-8 h-96 animate-pulse rounded-md bg-surface" />}>
+      <Suspense fallback={<div className="mt-8 h-96 motion-safe:animate-pulse rounded-md bg-surface" />}>
         <UsersView />
       </Suspense>
     </>

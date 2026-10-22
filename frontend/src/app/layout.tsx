@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Barlow, Barlow_Condensed, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
@@ -23,6 +23,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  viewportFit: "cover",
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getDict();
   return {
@@ -44,6 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </Suspense>
         <Toaster
           position="bottom-right"
+          mobileOffset={{ bottom: "5.5rem" }}
           toastOptions={{
             className: "font-sans !rounded-md !border-line !text-ink",
           }}

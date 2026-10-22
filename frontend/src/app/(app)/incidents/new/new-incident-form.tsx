@@ -55,7 +55,7 @@ export function NewIncidentForm({ parts }: { parts: Part[] }) {
           {SEVERITIES.map((severity) => (
             <label
               key={severity}
-              className="group relative flex cursor-pointer items-start gap-3 rounded-sm border border-line-strong bg-surface px-3 py-2.5 transition-colors hover:border-ink-subtle has-checked:border-ink has-checked:bg-sunken has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue"
+              className="group relative flex cursor-pointer items-start gap-3 rounded-sm border border-control bg-surface px-3 py-2.5 transition-colors hover:border-ink-subtle has-checked:border-ink has-checked:bg-sunken has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue"
             >
               <input
                 type="radio"
