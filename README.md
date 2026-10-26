@@ -1,29 +1,25 @@
 # SupplyGuard
 
-> Personal portfolio project inspired by incoming quality management in a manufacturing plant.
+> Proyecto personal de portfolio inspirado en la gestión de calidad de entrada en una fábrica. Web para registrar piezas defectuosas de proveedores, analizar sus causas, seguir planes de acción correctiva y medir resultados con KPIs. Hecho con FastAPI, PostgreSQL, roles con JWT y Next.js.
 
-SupplyGuard is a web application to register, analyze, resolve and measure incidents caused by defective parts received from suppliers.
+SupplyGuard es una aplicación web para registrar, analizar, resolver y medir las incidencias causadas por piezas defectuosas recibidas de proveedores.
 
-Incident workflow: `open → under analysis → corrective action → closed`.
+Flujo de una incidencia: `abierta → en análisis → acción correctiva → cerrada`.
 
-## Tech stack
+## Stack tecnológico
 
 - **Backend:** FastAPI, Pydantic, SQLAlchemy 2.0, Alembic
-- **Database:** PostgreSQL (hosted on [Neon](https://neon.tech))
+- **Base de datos:** PostgreSQL (alojada en [Neon](https://neon.tech))
 
-## Getting started
+## Primeros pasos
 
-Requirements: Python 3.13+ and a PostgreSQL database (e.g. a free [Neon](https://neon.tech) project).
+Requisitos: Python 3.13+ y una base de datos PostgreSQL (por ejemplo, un proyecto gratuito de [Neon](https://neon.tech)).
 
 ```bash
-cp .env.example .env          # then set DATABASE_URL to your connection string
+cp .env.example .env          # después pon en DATABASE_URL tu cadena de conexión
 cd backend
 python -m venv .venv
 source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
-uvicorn app.main:app --reload # API docs at http://localhost:8000/docs
-```
+uvicorn app.main:app --reload # documentación de la API en http://localhost:8000/docs
 
-## Project status
-
-Work in progress — currently in **Phase 0** (project skeleton).
