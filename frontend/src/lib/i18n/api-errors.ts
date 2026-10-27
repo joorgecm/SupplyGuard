@@ -1,25 +1,28 @@
+import { es } from "./dictionaries";
 import type { Locale } from "./locales";
+
+const statusName = (value: string) => es.status[value as keyof typeof es.status] ?? value;
 
 // La API responde siempre en inglés; aquí se traducen sus mensajes conocidos
 const EXACT: Record<string, string> = {
-  "Incorrect email or password": "Correo o contraseña incorrectos",
-  "Could not validate credentials": "No se han podido validar las credenciales",
-  "Not enough permissions": "No tienes permisos suficientes",
-  "Database unavailable": "Base de datos no disponible",
+  "Incorrect email or password": "El correo o la contraseña no son correctos",
+  "Could not validate credentials": "No se ha podido comprobar tu identidad. Vuelve a iniciar sesión",
+  "Not enough permissions": "No tienes permiso para hacer esta acción",
+  "Database unavailable": "La base de datos no está disponible",
   "An action plan can only be created for incidents in analysis":
-    "Solo se puede crear un plan de acción en incidencias en análisis",
+    "Solo se puede crear un plan de acción si la incidencia está en análisis",
   "Create an action plan to move to corrective action":
     "Crea un plan de acción para pasar a acción correctiva",
   "The action plan needs at least one task before closing":
-    "El plan de acción necesita al menos una tarea antes de cerrar",
+    "El plan de acción necesita al menos una tarea para poder cerrar la incidencia",
   "All action plan tasks must be completed before closing":
-    "Todas las tareas del plan deben estar completadas antes de cerrar",
+    "Todas las tareas del plan deben estar completadas para poder cerrar la incidencia",
   "Only engineers or the assignee can update this task":
     "Solo los ingenieros o el responsable pueden modificar esta tarea",
   "The assignee can only mark the task as completed or not":
-    "El responsable solo puede marcar la tarea como hecha o no hecha",
+    "El responsable solo puede marcar la tarea como completada o pendiente",
   "You cannot deactivate yourself or remove your own admin role":
-    "No puedes desactivarte ni quitarte tu propio rol de admin",
+    "No puedes desactivar tu propia cuenta ni quitarte el rol de administrador",
 };
 
 const ENTITY: Record<string, string> = {
@@ -33,7 +36,7 @@ const ENTITY: Record<string, string> = {
 };
 
 const PATTERNS: [RegExp, (m: string[]) => string][] = [
-  [/^(.+) (\d+) not found$/, (m) => `No se ha encontrado: ${ENTITY[m[1]] ?? m[1]} ${m[2]}`],
+  [/^(.+) (\d+) not found$/, (m) => `No existe: ${ENTITY[m[1]] ?? m[1]} ${m[2]}`],
   [
     /^Incident (\d+) already has an action plan$/,
     (m) => `La incidencia ${m[1]} ya tiene un plan de acción`,
@@ -41,7 +44,7 @@ const PATTERNS: [RegExp, (m: string[]) => string][] = [
   [/^Incident (\d+) is closed$/, (m) => `La incidencia ${m[1]} está cerrada`],
   [
     /^Cannot change status from '(.+)' to '(.+)'$/,
-    (m) => `No se puede cambiar el estado de '${m[1]}' a '${m[2]}'`,
+    (m) => `No se puede pasar de «${statusName(m[1])}» a «${statusName(m[2])}»`,
   ],
   [/^Supplier (\d+) is not active$/, (m) => `El proveedor ${m[1]} no está activo`],
   [/^User (\d+) is not active$/, (m) => `El usuario ${m[1]} no está activo`],
@@ -54,7 +57,7 @@ const PATTERNS: [RegExp, (m: string[]) => string][] = [
     /^Part '(.+)' lot '(.+)' already exists for this supplier$/,
     (m) => `La pieza '${m[1]}' con lote '${m[2]}' ya existe para este proveedor`,
   ],
-  [/^Request failed \((\d+)\)$/, (m) => `La petición ha fallado (${m[1]})`],
+  [/^Request failed \((\d+)\)$/, (m) => `La solicitud ha fallado (código ${m[1]})`],
 ];
 
 export function translateApiError(message: string, locale: Locale): string {

@@ -16,6 +16,7 @@ htmlcov/
 
 # Local AI tooling
 .claude/
+.impeccable/
 graphify-out/
 
 # Editors / OS
